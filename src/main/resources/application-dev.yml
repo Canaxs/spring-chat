@@ -7,8 +7,3 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
-
-spring-chat:
-  ui:
-    address: "*"

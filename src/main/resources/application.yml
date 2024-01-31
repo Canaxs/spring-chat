@@ -1,6 +1,4 @@
 server:
-  servlet:
-    context-path: "/chat"
   port: 8080
 
 spring:

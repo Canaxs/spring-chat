@@ -16,11 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class WebSecurity {
-
     private final JwtAuthFilter jwtAuthFilter;
     private final UserService userService;
 
@@ -38,10 +38,11 @@ public class WebSecurity {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(x ->
                         x.requestMatchers(
-                                "/auth/login/**"
+                                "/auth/login/**",
+                                "/user/create/**"
                         ).permitAll()
                 ).authorizeHttpRequests(x ->
-                        x.requestMatchers("/mailControl").authenticated()
+                        x.requestMatchers("/chat/**").authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -62,4 +63,6 @@ public class WebSecurity {
         return configuration.getAuthenticationManager();
 
     }
+
+
 }

@@ -3,18 +3,17 @@ package com.springchat.controller;
 import com.springchat.models.request.UserCreateRequest;
 import com.springchat.models.response.ResultResponse;
 import com.springchat.models.response.UserCreateResponse;
+import com.springchat.models.response.UsernameResponse;
 import com.springchat.persistence.entity.User;
 import com.springchat.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/user")
 public class UserController {
 
@@ -34,5 +33,10 @@ public class UserController {
         createResponses.add(UserCreateResponse.builder().id(String.valueOf(user.getId())).username(user.getUsername()).password(user.getPassword()).build());
         resultResponse.setResult(createResponses);
         return ResponseEntity.ok(resultResponse);
+    }
+
+    @GetMapping("/username")
+    private UsernameResponse getUsername() {
+        return userService.getUsername();
     }
 }

@@ -39,10 +39,12 @@ public class WebSecurity {
                 .authorizeHttpRequests(x ->
                         x.requestMatchers(
                                 "/auth/login/**",
-                                "/user/create/**"
+                                "/chat/**",
+                                "/topic/**",
+                                "/user/**"
                         ).permitAll()
                 ).authorizeHttpRequests(x ->
-                        x.requestMatchers("/chat/**").authenticated()
+                        x.requestMatchers("/auth/logout/**").authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

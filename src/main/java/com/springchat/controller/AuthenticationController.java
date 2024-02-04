@@ -1,6 +1,7 @@
 package com.springchat.controller;
 
 import com.springchat.models.request.UserAuthRequest;
+import com.springchat.models.response.TokenResponse;
 import com.springchat.service.AuthenticationService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/auth")
 public class AuthenticationController {
 
@@ -22,7 +24,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    private String isLogged(@RequestBody UserAuthRequest userAuthRequest) {
+    private TokenResponse isLogged(@RequestBody UserAuthRequest userAuthRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAuthRequest.getUsername(), userAuthRequest.getPassword()));
         return authenticateService.authenticate(userAuthRequest,authentication);
     }

@@ -2,9 +2,11 @@ package com.springchat.service;
 
 
 import com.springchat.models.request.UserCreateRequest;
+import com.springchat.models.response.UsernameResponse;
 import com.springchat.persistence.entity.User;
 import com.springchat.persistence.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,6 +43,10 @@ public class UserService implements UserDetailsService {
                 .username(userCreateRequest.getUsername())
                 .password(passwordEncoder.encode(userCreateRequest.getPassword())).build();
         return userRepository.save(newUser);
+    }
+
+    public UsernameResponse getUsername() {
+        return UsernameResponse.builder().username(SecurityContextHolder.getContext().getAuthentication().getName()).build();
     }
 
 }

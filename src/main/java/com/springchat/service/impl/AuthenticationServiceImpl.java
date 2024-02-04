@@ -1,6 +1,7 @@
 package com.springchat.service.impl;
 
 import com.springchat.models.request.UserAuthRequest;
+import com.springchat.models.response.TokenResponse;
 import com.springchat.persistence.repository.UserRepository;
 import com.springchat.service.AuthenticationService;
 import com.springchat.service.JwtService;
@@ -22,11 +23,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String authenticate(UserAuthRequest userAuthRequest, Authentication authentication) {
+    public TokenResponse authenticate(UserAuthRequest userAuthRequest, Authentication authentication) {
         if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(userAuthRequest.getUsername());
+            return TokenResponse.builder().token(jwtService.generateToken(userAuthRequest.getUsername())).build();
         }
-        return "null";
+        return TokenResponse.builder().build();
     }
 
     @Override

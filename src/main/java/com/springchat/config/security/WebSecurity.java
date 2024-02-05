@@ -41,7 +41,9 @@ public class WebSecurity {
                                 "/auth/login/**",
                                 "/chat/**",
                                 "/topic/**",
-                                "/user/**"
+                                "/user/**",
+                                "/auth/isExpired/**",
+                                "/numberSessions/**"
                         ).permitAll()
                 ).authorizeHttpRequests(x ->
                         x.requestMatchers("/auth/logout/**").authenticated()

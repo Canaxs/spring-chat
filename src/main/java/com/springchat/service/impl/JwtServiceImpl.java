@@ -52,12 +52,18 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Date extractExpiration(String token) {
-        Claims claims = Jwts
-                .parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims;
+        try {
+             claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        }
+        catch (Exception e) {
+            return new Date(new Date().getTime() - (1000 * 60 * 60 * 24));
+        }
         return claims.getExpiration();
     }
     private String createToken(Map<String, Object> claims, String userName) {

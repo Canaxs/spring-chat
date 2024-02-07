@@ -42,11 +42,10 @@ public class WebSecurity {
                                 "/chat/**",
                                 "/topic/**",
                                 "/user/**",
-                                "/auth/isExpired/**",
-                                "/numberSessions/**"
+                                "/auth/isExpired/**"
                         ).permitAll()
                 ).authorizeHttpRequests(x ->
-                        x.requestMatchers("/auth/logout/**").authenticated()
+                        x.requestMatchers("/auth/logout/**","/numberSessions/**").authenticated()
                 )
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

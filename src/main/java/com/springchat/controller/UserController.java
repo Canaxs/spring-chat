@@ -26,17 +26,13 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    private ResponseEntity<ResultResponse> userCreate(@RequestBody UserCreateRequest userCreateRequest) {
-        ResultResponse resultResponse = new ResultResponse();
-        List<UserCreateResponse> createResponses = new ArrayList<>();
+    private ResponseEntity<UserCreateResponse> userCreate(@RequestBody UserCreateRequest userCreateRequest) {
         User user = userService.createUser(userCreateRequest);
-        createResponses.add(UserCreateResponse.builder().id(String.valueOf(user.getId())).username(user.getUsername()).password(user.getPassword()).build());
-        resultResponse.setResult(createResponses);
-        return ResponseEntity.ok(resultResponse);
+        return ResponseEntity.ok(UserCreateResponse.builder().id(String.valueOf(user.getId())).username(user.getUsername()).password(user.getPassword()).build());
     }
 
     @GetMapping("/username")
-    private UsernameResponse getUsername() {
-        return userService.getUsername();
+    private ResponseEntity<UsernameResponse> getUsername() {
+        return ResponseEntity.ok(userService.getUsername());
     }
 }

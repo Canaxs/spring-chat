@@ -23,9 +23,7 @@ public class WebSocketMetricLogger implements ChannelInterceptor {
     private final JwtService jwtService;
     private final UserService userService;
 
-    public final Set<String> connectedSessionIds;
-
-    private Boolean auth = false;
+    private final Set<String> connectedSessionIds;
 
     public WebSocketMetricLogger(JwtService jwtService, UserService userService) {
         this.jwtService = jwtService;
@@ -36,25 +34,21 @@ public class WebSocketMetricLogger implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-        if(accessor != null && (StompCommand.CONNECT.equals(accessor.getCommand()) || StompCommand.SEND.equals(accessor.getCommand()))) {
+        if(accessor != null && (StompCommand.CONNECT.equals(accessor.getCommand()) || StompCommand.SEND.equals(accessor.getCommand()) || StompCommand.SUBSCRIBE.equals(accessor.getCommand()))) {
             String token = (Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization"))).substring(7);
             String userName = jwtService.extractUser(token);
             Boolean isExpired = !jwtService.validateExpiration(token);
-            if (userName != null && auth == false && !isExpired) {
+            if (userName != null && !isExpired) {
                 UserDetails user = userService.loadUserByUsername(userName);
                 if (jwtService.validateToken(token, user)) {
                     connectedSessionIds.add(accessor.getSessionId());
-                    System.out.println(accessor.getSessionId()+" ve: "+connectedSessionIds.size());
-                    auth = true;
                 }
                 else {
                     throw new ChatException("");
                 }
             }
             else {
-                if(auth == false || isExpired) {
-                    throw new ChatException("");
-                }
+                throw new ChatException("");
             }
 
         }
@@ -62,7 +56,7 @@ public class WebSocketMetricLogger implements ChannelInterceptor {
             if(StompCommand.DISCONNECT.equals(accessor.getCommand())) {
                 connectedSessionIds.remove(accessor.getSessionId());
             }
-            if(auth == false) {
+            else {
                 throw new ChatException("");
             }
 
@@ -70,4 +64,9 @@ public class WebSocketMetricLogger implements ChannelInterceptor {
 
         return ChannelInterceptor.super.preSend(message, channel);
     }
+
+    public String getConnectedSessionIds() {
+        return String.valueOf(connectedSessionIds.size());
+    }
+
 }

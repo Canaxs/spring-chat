@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://spring-chat-ui.vercel.app",allowCredentials = "true")
+@CrossOrigin(origins = "*")
 @RequestMapping("/user")
 public class UserController {
 

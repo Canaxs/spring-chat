@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://spring-chat-ui.vercel.app",allowCredentials = "true")
 @RequestMapping("/auth")
 public class AuthenticationController {
 
